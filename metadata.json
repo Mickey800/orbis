@@ -1,0 +1,7 @@
+{
+  "name": "VisionMetric - IPD Scanner",
+  "description": "A professional-grade web application to measure Interpupillary Distance (IPD) using AI vision. Capture a photo or upload an image to get precise measurements for VR headsets or eyewear.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
