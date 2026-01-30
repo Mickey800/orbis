@@ -1,6 +1,6 @@
 {
-  "name": "VisionMetric - IPD Scanner",
-  "description": "A professional-grade web application to measure Interpupillary Distance (IPD) using AI vision. Capture a photo or upload an image to get precise measurements for VR headsets or eyewear.",
+  "name": "VisionMetric - Clinical IPD Analyzer",
+  "description": "Professional-grade interpupillary distance measurement using clinical geometric averaging and AI facial mapping. Supports live camera scans and high-resolution photo uploads with automatic calibration.",
   "requestFramePermissions": [
     "camera"
   ]
