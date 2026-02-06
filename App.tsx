@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { Camera, RefreshCw, Info, CheckCircle, Target, Scan, ShieldCheck, Fingerprint, Activity, Crosshair, Eye, Loader2, ShieldAlert, Moon, Sun } from 'lucide-react';
+import { Camera, RefreshCw, Info, CheckCircle, Target, Scan, ShieldCheck, Activity, Crosshair, Eye, Loader2, ShieldAlert, Moon, Sun } from 'lucide-react';
 import { analyzeIPD, preCalibrateIPD } from './services/geminiService';
 
 const Header = ({ authorized, theme, onToggleTheme }) => (
@@ -7,10 +7,10 @@ const Header = ({ authorized, theme, onToggleTheme }) => (
     <div className="max-w-6xl mx-auto px-6 h-16 md:h-20 flex items-center justify-between">
       <div className="flex items-center gap-3">
         <div className={`w-9 h-9 ${authorized ? 'bg-indigo-600' : 'bg-emerald-600'} rounded-xl flex items-center justify-center text-white shadow-lg transition-colors`}>
-          <Fingerprint size={20} />
+          <Eye size={20} />
         </div>
         <div>
-          <span className={`font-bold text-lg tracking-tight ${theme === 'dark' ? 'text-white' : 'text-slate-900'} block leading-none`}>VisionMetric</span>
+          <span className={`font-bold text-lg tracking-tight ${theme === 'dark' ? 'text-white' : 'text-slate-900'} block leading-none`}>Gaze</span>
         </div>
       </div>
       <div className="flex items-center gap-4">
@@ -193,8 +193,7 @@ export default function App() {
           <div className="max-w-4xl mx-auto animate-in fade-in slide-in-from-bottom-6 duration-700">
             <div className="mb-12">
               <h1 className={`text-6xl md:text-8xl font-black mb-8 tracking-tighter leading-[0.85] ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
-                Vision <br/>
-                <span className="text-emerald-600">Metric.</span>
+                Gaze<span className="text-emerald-600">.</span>
               </h1>
               <p className={`text-xl ${isDarkMode ? 'text-slate-400' : 'text-slate-500'} mb-12 max-w-2xl leading-relaxed`}>
                 Using structured-light dot projection to map your facial architecture in 3D. Gemini-powered clinical precision for PD measurement.

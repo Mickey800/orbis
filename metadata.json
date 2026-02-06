@@ -1,5 +1,5 @@
 {
-  "name": "VisionMetric - Clinical IPD Analyzer",
+  "name": "Gaze - Clinical IPD Analyzer",
   "description": "Professional-grade interpupillary distance measurement using clinical geometric averaging and AI facial mapping. Supports live camera scans and high-resolution photo uploads with automatic calibration.",
   "requestFramePermissions": [
     "camera"
