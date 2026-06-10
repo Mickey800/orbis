@@ -93,6 +93,7 @@ export default function App() {
   const [error, setError] = useState(null);
   const [isCalibrating, setIsCalibrating] = useState(false);
   const [calibratedIPD, setCalibratedIPD] = useState(null);
+  const [isSimulationMode, setIsSimulationMode] = useState(false);
 
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
@@ -130,6 +131,16 @@ export default function App() {
       try {
         const res = await analyzeIPD(frame.split(',')[1]);
         
+        if (!res || res.error || !res.rightPupilCenter || !res.leftPupilCenter) {
+          setError(res?.error || "Spatial analysis failed. Ensure the IR mesh is fully visible on your face.");
+          setStatus('error');
+          return;
+        }
+
+        if (res.isSimulation) {
+          setIsSimulationMode(true);
+        }
+
         const baseEstimate = calibratedIPD !== null ? calibratedIPD : res.ipdMm;
         const finalIpd = baseEstimate + 5;
         
@@ -152,6 +163,7 @@ export default function App() {
       setError(null);
       setCalibratedIPD(null);
       setResult(null);
+      setIsSimulationMode(false);
       const stream = await navigator.mediaDevices.getUserMedia({ 
         video: { facingMode: 'user', width: { ideal: 1920 }, height: { ideal: 1080 } } 
       });
@@ -161,8 +173,17 @@ export default function App() {
       setTimeout(async () => {
         const frame = await captureFrame(false);
         if (frame) {
-          const est = await preCalibrateIPD(frame.split(',')[1]);
-          setCalibratedIPD(est.ipdMm);
+          try {
+            const est = await preCalibrateIPD(frame.split(',')[1]);
+            if (est && typeof est.ipdMm === 'number') {
+              setCalibratedIPD(est.ipdMm);
+              if (est.isSimulation) {
+                setIsSimulationMode(true);
+              }
+            }
+          } catch (e) {
+            console.error("Pre-calibration failed", e);
+          }
         }
         setIsCalibrating(false);
       }, 1500);
@@ -189,6 +210,19 @@ export default function App() {
       <Header authorized={status === 'authorized'} theme={theme} onToggleTheme={toggleTheme} />
 
       <main className="flex-grow max-w-6xl mx-auto w-full px-4 py-8 md:py-16">
+        {isSimulationMode && (
+          <div className={`mb-10 p-6 rounded-[2rem] border ${isDarkMode ? 'bg-amber-950/25 border-amber-500/25 text-amber-300' : 'bg-amber-50 border-amber-200 text-amber-800'} flex items-start gap-4 text-sm animate-in fade-in duration-500`}>
+            <ShieldAlert className="shrink-0 text-amber-500 mt-1" size={24} />
+            <div className="space-y-1">
+              <h4 className="font-extrabold text-base tracking-tight">Offline Simulation Mode Active</h4>
+              <p className={`${isDarkMode ? 'text-slate-400' : 'text-slate-700'} text-xs leading-relaxed`}>
+                Your <code className="px-1.5 py-0.5 rounded bg-amber-500/10 font-mono font-bold">GEMINI_API_KEY</code> environment variable is missing or invalid. 
+                Gaze automatically loaded its safe clinical simulation backup. To connect to the live Gemini 2.5 Pro model on your real camera stream, please enter a valid Gemini API Key in the <strong className="font-semibold">Settings</strong> panel of AI Studio.
+              </p>
+            </div>
+          </div>
+        )}
+
         {status === 'idle' && (
           <div className="max-w-4xl mx-auto animate-in fade-in slide-in-from-bottom-6 duration-700">
             <div className="mb-12">
