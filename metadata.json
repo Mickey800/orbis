@@ -3,5 +3,8 @@
   "description": "Professional-grade interpupillary distance measurement using clinical geometric averaging and AI facial mapping. Supports live camera scans and high-resolution photo uploads with automatic calibration.",
   "requestFramePermissions": [
     "camera"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
   ]
 }
